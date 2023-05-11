@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Stack;
 import javax.swing.*;
 
-public class Board{
+public class Board extends JPanel{
     private final int NUM_IMAGES = 13;
     private final int CELL_SIZE = 15;
 
@@ -26,6 +26,21 @@ public class Board{
     private final int N_MINES = 40;
     private final int N_ROWS = 16;
     private final int N_COLS = 16;
+    
+    private final int BOARD_WIDTH = N_COLS * CELL_SIZE + 1;
+    private final int BOARD_HEIGHT = N_ROWS * CELL_SIZE + 1;
+
+    private int[] field;
+    private boolean inGame;
+    private int minesLeft;
+    private Image[] img;
+
+
+    private int allCells;
+    private final JLabel statusbar;
+
+    private Stack<int[]> gameStateStack = new Stack<>();
+
     
     public Board(JLabel statusbar) {
 
