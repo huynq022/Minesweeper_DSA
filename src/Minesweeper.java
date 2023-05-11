@@ -1,4 +1,3 @@
-package com.zetcode;
 
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
