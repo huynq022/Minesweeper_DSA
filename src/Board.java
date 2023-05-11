@@ -237,5 +237,9 @@ public class Board{
                 }
             }
             // undo part 
+            
+            // save current game state before making a move
+            int[] gameState = Arrays.copyOf(field, field.length);
+            gameStateStack.push(gameState);
         }
 }
