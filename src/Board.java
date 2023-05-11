@@ -1,3 +1,12 @@
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.*;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Stack;
+import javax.swing.*;
+
 public class Board{
     private final int NUM_IMAGES = 13;
     private final int CELL_SIZE = 15;
