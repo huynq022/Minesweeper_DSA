@@ -18,6 +18,145 @@ public class Board{
     private final int N_ROWS = 16;
     private final int N_COLS = 16;
     
+    public Board(JLabel statusbar) {
+
+        this.statusbar = statusbar;
+        initBoard();
+    }
+
+    private void initBoard() {
+
+        setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
+
+        // Array to store images
+        img = new Image[NUM_IMAGES];
+
+        for (int i = 0; i < NUM_IMAGES; i++) {
+
+            var path = "src/resources/" + i + ".png";
+
+            // Use ImageIcon to load the image file specified by the path variable
+            img[i] = (new ImageIcon(path)).getImage();
+        }
+
+        addMouseListener(new MinesAdapter());
+        newGame();
+    }
+
+    private void newGame() {
+
+        int cell;
+
+        var random = new Random(); // generate random numbers
+        inGame = true; // indicate game is in progress
+        minesLeft = N_MINES; // total mines in game
+
+        allCells = N_ROWS * N_COLS; // total number of cells
+        field = new int[allCells]; // present state of a cell
+
+        for (int i = 0; i < allCells; i++) {
+
+            field[i] = COVER_FOR_CELL;
+        }
+
+        statusbar.setText(Integer.toString(minesLeft)); // show number of mines left
+
+        int i = 0;
+
+        // use while to place randomly mines
+        while (i < N_MINES) {
+
+            int position = (int) (allCells * random.nextDouble());
+
+            // check if position is in range of field array
+            // and that cell is not a mine
+            if ((position < allCells)
+                    && (field[position] != COVERED_MINE_CELL)) {
+
+                int current_col = position % N_COLS; // determine neighboring cells
+                field[position] = COVERED_MINE_CELL; // set as a mine
+                i++;
+
+                // check the current position is not  in the first column
+                if (current_col > 0) {
+
+                    // check diagonally above to the left
+                    cell = position - 1 - N_COLS;
+                    if (cell >= 0) {
+                        // if not a mine -> increase by 1
+                        if (field[cell] != COVERED_MINE_CELL) {
+                            field[cell] += 1;
+                        }
+                    }
+
+                    // check diagonally below to the left
+                    cell = position - 1;
+                    if (cell >= 0) {
+                        // if not a mine -> increase by 1
+                        if (field[cell] != COVERED_MINE_CELL) {
+                            field[cell] += 1;
+                        }
+                    }
+
+                    // to the left of the current position
+                    cell = position + N_COLS - 1;
+                    if (cell < allCells) {
+                        // if not a mine -> increase by 1
+                        if (field[cell] != COVERED_MINE_CELL) {
+                            field[cell] += 1;
+                        }
+                    }
+                }
+
+                cell = position - N_COLS;
+                if (cell >= 0) {
+                    // if not a mine -> increase by 1
+                    if (field[cell] != COVERED_MINE_CELL) {
+                        field[cell] += 1;
+                    }
+                }
+
+                cell = position + N_COLS;
+                if (cell < allCells) {
+                    // if not a mine -> increase by 1
+                    if (field[cell] != COVERED_MINE_CELL) {
+                        field[cell] += 1;
+                    }
+                }
+
+                // check current position is not the last column of game board
+                if (current_col < (N_COLS - 1)) {
+                    // above
+                    cell = position - N_COLS + 1;
+                    if (cell >= 0) {
+                        // if not a mine -> increase by 1
+                        if (field[cell] != COVERED_MINE_CELL) {
+                            field[cell] += 1;
+                        }
+                    }
+
+                    // below
+                    cell = position + N_COLS + 1;
+                    if (cell < allCells) {
+                        // if not a mine -> increase by 1
+                        if (field[cell] != COVERED_MINE_CELL) {
+                            field[cell] += 1;
+                        }
+                    }
+
+                    // to the right
+                    cell = position + 1;
+                    if (cell < allCells) {
+                        // if not a mine -> increase by 1
+                        if (field[cell] != COVERED_MINE_CELL) {
+                            field[cell] += 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
      private class MinesAdapter extends MouseAdapter {
 
         @Override
