@@ -241,5 +241,19 @@ public class Board{
             // save current game state before making a move
             int[] gameState = Arrays.copyOf(field, field.length);
             gameStateStack.push(gameState);
+            
+            getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK), "undo");
+            getActionMap().put("undo", new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (!gameStateStack.isEmpty()) {
+                        // undo last move and restore previous game state
+                        field = gameStateStack.pop();
+                        inGame = true;
+                        repaint();
+                    }
+                }
+            });
+            
         }
 }
